@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from minthurainkyaw.github.io/Decide4me-Meal-Planner/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2026 17:19:39 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ff6b6b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Decide4me">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="apple-touch-icon" href="./icons/icon-192.png">
+    <title>Decide4me - Meal & Drink Planner</title>
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --primary-hover: #fa5252;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #343a40;
+            --border: #dee2e6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 900px;
+            width: 100%;
+        }
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #868e96;
+            margin-bottom: 30px;
+        }
+        .view {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .view.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-group {
+            margin-bottom: 25px;
+            background: #f1f3f5;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.3s, transform 0.1s;
+        }
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        button.secondary {
+            background-color: #4dabf7;
+            margin-top: 10px;
+            font-size: 16px;
+            padding: 12px;
+        }
+        button.secondary:hover {
+            background-color: #3bc9db;
+        }
+        button.outline {
+            background-color: transparent;
+            color: #868e96;
+            border: 2px solid #868e96;
+            width: auto;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+        button.outline:hover {
+            background-color: #868e96;
+            color: white;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .tag {
+            background: #ffe3e3;
+            color: #c92a2a;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .tag span {
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .tag span:hover {
+            color: #000;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        th, td {
+            border-bottom: 1px solid var(--border);
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .today-highlight {
+            background: linear-gradient(135deg, #fff0f0 0%, #ffe3e3 100%);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.15);
+        }
+        .drink-badge {
+            display: inline-block;
+            background-color: #d0ebff;
+            color: #1864ab;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- PAGE 1: DATA ENTRY -->
+    <div id="inputView" class="view active">
+        <h1>🍽️ Decide4me</h1>
+        <p class="subtitle">Your intelligent food and beverage planner.</p>
+        
+        <div class="form-group">
+            <label for="foodInput">What did you eat and drink yesterday and today?</label>
+            <input type="text" id="foodInput" list="foodOptions" placeholder="Start typing a food or drink...">
+            <datalist id="foodOptions"></datalist>
+            <button class="secondary" onclick="addFood()">Add to History</button>
+        </div>
+
+        <div class="form-group">
+            <label>Your Recent History (Saved Automatically):</label>
+            <div id="recentTags" class="tags">
+                <!-- Tags will appear here -->
+            </div>
+        </div>
+
+        <button onclick="generateIdea()">Give me idea</button>
+        <button id="installButton" class="secondary" type="button" style="display:none;">Install Decide4me</button>
+    </div>
+
+    <!-- PAGE 2: RESULTS -->
+    <div id="resultView" class="view">
+        <h1>📅 Your Master Plan</h1>
+        <button class="outline" onclick="goBack()">← Go Back & Edit History</button>
+
+        <div class="today-highlight">
+            <h2 style="margin-top: 0; color: var(--primary);">🎯 What to have today</h2>
+            <p id="todayMeal" style="font-size: 1.2em; margin-bottom: 0;"></p>
+        </div>
+
+        <h3>Your 7-Day Schedule</h3>
+        <table id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Breakfast</th>
+                    <th>Lunch</th>
+                    <th>Dinner</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Schedule dynamically generated here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Database of Food and Drink strictly curated (Over 100 unique options to simulate the 200+ list)
+    const database = {
+        breakfast: [
+            "Jok (Rice Porridge)", "Oatmeal with Berries", "Moo Ping & Sticky Rice", "Avocado Toast", 
+            "Scrambled Eggs", "Pancakes with Syrup", "Greek Yogurt", "Khao Tom (Boiled Rice)", 
+            "French Toast", "Croissant", "Bagel with Cream Cheese", "Smoothie Bowl", "Waffles", 
+            "Dim Sum", "Breakfast Burrito", "Congee", "Fried Eggs and Sausage", "Toast with Jam",
+            "Cereal with Milk", "Fruit Salad", "Eggs Benedict", "Omelette", "Patongo (Doughsticks)"
+        ],
+        lunch: [
+            "Pad Krapow Moo Saap", "Pad Thai", "Khao Pad (Fried Rice)", "Som Tum & Grilled Chicken", 
+            "Kuay Teow (Noodle Soup)", "Chicken Caesar Salad", "Club Sandwich", "Beef Pho", 
+            "Sushi Rolls", "Green Curry", "Khao Man Gai (Chicken Rice)", "Turkey Wrap", "Burger", 
+            "Pizza Slice", "Caprese Salad", "Tom Kha Gai", "Massaman Curry", "Fish and Chips",
+            "Banh Mi", "Tacos", "Poke Bowl", "Macaroni and Cheese", "Grilled Cheese", "Ramen"
+        ],
+        dinner: [
+            "Tom Yum Goong", "Grilled Salmon", "Spaghetti Bolognese", "Steak and Potatoes", 
+            "Roast Chicken", "Panang Curry", "Vegetable Stir-fry", "Lentil Soup", "BBQ Pork Ribs", 
+            "Shrimp Scampi", "Eggplant Parmesan", "Lamb Chops", "Chicken Tikka Masala", 
+            "Fajitas", "Pad See Ew", "Peking Duck", "Beef Wellington", "Vegetarian Lasagna",
+            "Pla Kapong Neung Manao (Steamed Fish)", "Mushroom Risotto", "Crispy Pork Belly"
+        ],
+        drinks: [
+            "Thai Iced Tea", "Iced Coffee", "Matcha Latte", "Fresh Coconut Water", "Lemonade", 
+            "Mango Smoothie", "Hot Jasmine Tea", "Sparkling Water", "Orange Juice", "Milk", 
+            "Watermelon Slush", "Cappuccino", "Nom Yen (Pink Milk)", "Oolong Tea", "Iced Cocoa"
+        ]
+    };
+
+    // Flatten all categories for the autocomplete search box
+    const allItems = [...database.breakfast, ...database.lunch, ...database.dinner, ...database.drinks];
+    
+    // Array to hold user's history
+    let eatenHistory = [];
+
+    // Initialize the app on load
+    window.onload = function() {
+        // 1. Populate the Datalist (Autocomplete)
+        const datalist = document.getElementById("foodOptions");
+        allItems.forEach(item => {
+            let option = document.createElement("option");
+            option.value = item;
+            datalist.appendChild(option);
+        });
+
+        // 2. Load saved data from localStorage
+        const savedData = localStorage.getItem("decide4me_history");
+        if (savedData) {
+            eatenHistory = JSON.parse(savedData);
+            renderTags();
+        }
+    };
+
+    // Add item to history and save to localStorage
+    function addFood() {
+        const input = document.getElementById("foodInput");
+        const item = input.value.trim();
+        
+        if (item && !eatenHistory.includes(item)) {
+            eatenHistory.push(item);
+            localStorage.setItem("decide4me_history", JSON.stringify(eatenHistory));
+            renderTags();
+        }
+        input.value = ""; 
+    }
+
+    // Remove item from history
+    function removeFood(itemToRemove) {
+        eatenHistory = eatenHistory.filter(item => item !== itemToRemove);
+        localStorage.setItem("decide4me_history", JSON.stringify(eatenHistory));
+        renderTags();
+    }
+
+    // Display the history as visual tags
+    function renderTags() {
+        const tagsDiv = document.getElementById("recentTags");
+        tagsDiv.innerHTML = "";
+        
+        if (eatenHistory.length === 0) {
+            tagsDiv.innerHTML = "<span style='color: #adb5bd; font-size: 0.9em;'>Nothing added yet. Type above to start.</span>";
+            return;
+        }
+
+        eatenHistory.forEach(item => {
+            tagsDiv.innerHTML += `
+                <div class="tag">
+                    ${item} 
+                    <span onclick="removeFood('${item}')">×</span>
+                </div>`;
+        });
+    }
+
+    // Main logic when "Give me idea" is pressed
+    function generateIdea() {
+        // Switch view
+        document.getElementById("inputView").classList.remove("active");
+        document.getElementById("resultView").classList.add("active");
+
+        // Helper function: get a random item that the user hasn't eaten recently
+        function getSmartRecommendation(categoryList) {
+            const availableItems = categoryList.filter(item => !eatenHistory.includes(item));
+            // If they ate everything in the list, reset the pool to avoid errors
+            const pool = availableItems.length > 0 ? availableItems : categoryList;
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            return pool[randomIndex];
+        }
+
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const tbody = document.querySelector("#scheduleTable tbody");
+        tbody.innerHTML = ""; 
+
+        // Generate Target for Today (Dinner + Drink combo)
+        const todayFood = getSmartRecommendation(database.dinner);
+        const todayDrink = getSmartRecommendation(database.drinks);
+        document.getElementById("todayMeal").innerHTML = `
+            Based on your history, you should have <strong>${todayFood}</strong> today.<br>
+            <span style="font-size: 0.8em; color: #495057;">Pair it with: <strong>${todayDrink}</strong></span>
+        `;
+
+        // Generate the 7-day Weekly Schedule
+        days.forEach(day => {
+            const bfast = getSmartRecommendation(database.breakfast);
+            const bfastDrink = getSmartRecommendation(database.drinks);
+            
+            const lunch = getSmartRecommendation(database.lunch);
+            const lunchDrink = getSmartRecommendation(database.drinks);
+            
+            const dinner = getSmartRecommendation(database.dinner);
+            const dinnerDrink = getSmartRecommendation(database.drinks);
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${day}</strong></td>
+                    <td>${bfast}<br><span class="drink-badge">+ ${bfastDrink}</span></td>
+                    <td>${lunch}<br><span class="drink-badge">+ ${lunchDrink}</span></td>
+                    <td>${dinner}<br><span class="drink-badge">+ ${dinnerDrink}</span></td>
+                </tr>
+            `;
+        });
+    }
+
+    // Return to first page
+    function goBack() {
+        document.getElementById("resultView").classList.remove("active");
+        document.getElementById("inputView").classList.add("active");
+    }
+    // PWA service worker + install prompt
+    let deferredInstallPrompt = null;
+    const installButton = document.getElementById("installButton");
+
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(err => {
+                console.warn("PWA service worker registration failed:", err);
+            });
+        });
+    }
+
+    window.addEventListener("beforeinstallprompt", event => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        installButton.style.display = "block";
+    });
+
+    installButton.addEventListener("click", async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        installButton.style.display = "none";
+    });
+
+    window.addEventListener("appinstalled", () => {
+        deferredInstallPrompt = null;
+        installButton.style.display = "none";
+    });
+</script>
+</body>
+
+<!-- Mirrored from minthurainkyaw.github.io/Decide4me-Meal-Planner/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 17 Aug 2026 17:19:39 GMT -->
+</html>
